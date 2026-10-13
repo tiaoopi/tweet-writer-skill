@@ -117,8 +117,13 @@ def main():
     p = run(["git", "push", "origin", "main"])
     log("push 输出: %s" % ((p.stdout + p.stderr).strip() or "(空)"))
     if p.returncode != 0:
-        log("ERROR: push 失败，请检查网络/凭证。")
-        return 1
+        log("push 失败，尝试 rebase 后重推……")
+        run(["git", "pull", "--rebase", "origin", "main"])
+        p = run(["git", "push", "origin", "main"])
+        log("二次 push 输出: %s" % ((p.stdout + p.stderr).strip() or "(空)"))
+        if p.returncode != 0:
+            log("ERROR: push 失败，请检查网络/凭证。")
+            return 1
     log("完成：已推送到 origin/main。")
     return 0
 
