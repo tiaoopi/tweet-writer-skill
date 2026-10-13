@@ -1,0 +1,5 @@
+# 同步脚本运行时产生的日志，不入库
+sync.log
+# Python 缓存
+__pycache__/
+*.pyc
