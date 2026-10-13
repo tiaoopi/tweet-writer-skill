@@ -30,7 +30,14 @@ def log(msg):
 
 
 def run(args, cwd=REPO):
-    return subprocess.run(args, cwd=cwd, capture_output=True, text=True, shell=False)
+    env = os.environ.copy()
+    # 显式指定本地代理与凭证 helper，避免沙箱/非交互环境下 SSL 握手失败或读不到凭证
+    env.setdefault("HTTP_PROXY", "http://127.0.0.1:7890")
+    env.setdefault("HTTPS_PROXY", "http://127.0.0.1:7890")
+    env.setdefault("http_proxy", "http://127.0.0.1:7890")
+    env.setdefault("https_proxy", "http://127.0.0.1:7890")
+    env.pop("GIT_TERMINAL_PROMPT", None)
+    return subprocess.run(args, cwd=cwd, capture_output=True, text=True, shell=False, env=env)
 
 
 def list_skill_dirs(root):
@@ -114,12 +121,15 @@ def main():
         log("commit 输出: %s" % (c.stdout + c.stderr))
     log(c.stdout.strip() or c.stderr.strip())
 
-    p = run(["git", "push", "origin", "main"])
+    # 推送：显式指定代理与凭证 helper，兼容 WorkBuddy 会话内的凭证代理
+    PUSH = ["git", "-c", "http.proxy=http://127.0.0.1:7890",
+            "-c", "credential.helper=helper-selector", "push", "origin", "main"]
+    p = run(PUSH)
     log("push 输出: %s" % ((p.stdout + p.stderr).strip() or "(空)"))
     if p.returncode != 0:
         log("push 失败，尝试 rebase 后重推……")
-        run(["git", "pull", "--rebase", "origin", "main"])
-        p = run(["git", "push", "origin", "main"])
+        run(["git", "-c", "http.proxy=http://127.0.0.1:7890", "pull", "--rebase", "origin", "main"])
+        p = run(PUSH)
         log("二次 push 输出: %s" % ((p.stdout + p.stderr).strip() or "(空)"))
         if p.returncode != 0:
             log("ERROR: push 失败，请检查网络/凭证。")
