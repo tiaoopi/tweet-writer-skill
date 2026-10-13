@@ -24,6 +24,14 @@ IGNORE = {
     ".model_invocation_to_override_migration.json",
 }
 
+# 各技能在 README「技能一览」表中的触发示例（新技能若不在此表，留空即可，介绍仍会自动收录）
+TRIGGERS = {
+    "tweet-writer": '"写推文 / 把这篇写成推文 / 发一条推"',
+    "tweet-rewriter": '"仿写推文 / 照这个风格写推 / 模仿这条"',
+    "image-tweet-writer": '"读图写推文 / 看这张图写条推"',
+    "wechat-article-to-poster": '"读取公众号文章 / 把这篇公众号做成贴图"',
+}
+
 
 def log(msg):
     print("[%s] %s" % (datetime.datetime.now().strftime("%H:%M:%S"), msg), flush=True)
@@ -86,6 +94,73 @@ def sync_one(name):
     return changed
 
 
+def parse_frontmatter(path):
+    """从 SKILL.md 提取 frontmatter 中的 name / description（单行）。"""
+    name, desc = None, None
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            text = f.read(8192)
+    except Exception:
+        return name, desc
+    if text.startswith("---"):
+        lines = text.split("\n")
+        in_fm = False
+        for ln in lines:
+            s = ln.strip()
+            if s == "---":
+                if in_fm:
+                    break
+                in_fm = True
+                continue
+            if in_fm and s.startswith("name:"):
+                name = s[len("name:"):].strip()
+            elif in_fm and s.startswith("description:"):
+                desc = s[len("description:"):].strip()
+                # description 可能很长且含 markdown，截断到合理长度
+                if len(desc) > 160:
+                    desc = desc[:157].rstrip() + "..."
+    return name, desc
+
+
+def update_readme(skills):
+    """根据技能 frontmatter 自动刷新 README 的「技能一览」表，返回 True 表示有改动。"""
+    readme = os.path.join(REPO, "README.md")
+    if not os.path.exists(readme):
+        log("WARN: README.md 不存在，跳过索引更新")
+        return False
+    with open(readme, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    rows = []
+    for name in skills:
+        fp = os.path.join(SRC, name, "SKILL.md")
+        _, desc = parse_frontmatter(fp)
+        if not desc:
+            desc = "（见 SKILL.md）"
+        desc = desc.replace("|", "\\|").replace("\n", " ")
+        trig = TRIGGERS.get(name, "")
+        rows.append("| [%s](./%s/) | %s | %s |" % (name, name, desc, trig))
+    table = (
+        "## 📦 技能一览\n\n"
+        "| 技能 | 一句话介绍 | 触发示例 |\n"
+        "|---|---|---|\n"
+        + "\n".join(rows) + "\n"
+    )
+
+    start = content.find("## 📦 技能一览")
+    if start == -1:
+        log("WARN: README 中未找到「技能一览」小节，跳过索引更新")
+        return False
+    nxt = content.find("\n## ", start + 1)
+    end = nxt if nxt != -1 else len(content)
+    new_content = content[:start] + table + "\n" + content[end:].lstrip("\n")
+    if new_content != content:
+        with open(readme, "w", encoding="utf-8", newline="\n") as f:
+            f.write(new_content)
+        return True
+    return False
+
+
 def main():
     if not os.path.isdir(SRC):
         log("ERROR: 源目录不存在: %s" % SRC)
@@ -104,6 +179,10 @@ def main():
             log("  已同步(有变化): %s" % name)
         else:
             log("  无变化: %s" % name)
+
+    # 刷新 README 技能索引（每次同步都根据本地技能列表重建）
+    if update_readme(skills):
+        log("README 技能索引已更新。")
 
     # 检查仓库整体是否有改动
     st = run(["git", "status", "--porcelain"])

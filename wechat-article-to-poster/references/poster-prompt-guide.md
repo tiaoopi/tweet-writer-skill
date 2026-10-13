@@ -1,94 +1,105 @@
-# 贴图生成参考：提示词模板、低密度规范、降级方案
+# 贴图 SVG 规范：模板、配色、转换、正反例
 
-## 一、低密度排版规范（最重要）
-
-贴图做出来要"一眼扫完"，不是"读一篇文章"。硬指标：
+## 一、总体要求
 
 | 项目 | 要求 |
 |---|---|
-| 每张图的点 | **只讲 1 个** |
-| 主标题 | **≤ 16 字**，大字加粗 |
-| 正文要点 | **2~3 行，每行 ≤18 字，合计 ≤60 字** |
-| 底部引导 | 可选，1 个 emoji 或 "👇""收藏" 之类，≤4 字 |
-| 留白 | 文字四周留足边距，**绝不满铺** |
-| 字号层级 | 主标题明显大于正文，对比清楚 |
+| 张数 | **≤3 张**（能 1 张讲清就 1 张） |
+| 尺寸 | 1080 × 1920（竖版手机比例） |
+| 风格 | 深色科技风（深蓝渐变底 + 青/紫强调） |
+| 每行字数 | ≤22 字 |
+| 整图正文 | 合计 ≤180 字 |
+| 交付 | PNG + **SVG 代码原文**都要给用户 |
 
-> **口诀：字少、图大、留白多。一张塞不下，就拆两张。**
+## 二、标准 SVG 模板（1 张承载全部要点）
 
-## 二、整组贴图的结构
+```svg
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1020"/>
+      <stop offset="100%" stop-color="#141f3d"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
 
-| 张次 | 作用 | 内容 |
-|---|---|---|
-| 第 1 张 | 封面/主图 | 最扎心的点 or 金句做主标题，负责勾人 |
-| 第 2~N 张 | 要点图 | 每个要点一张；主标题 + 2~3 行短句 |
-| （可选）末张 | 收尾图 | 一句总结 or 互动引导 |
+  <rect width="1080" height="1920" fill="url(#bg)"/>
+  <circle cx="930" cy="150" r="220" fill="#22d3ee" opacity="0.08"/>
+  <circle cx="110" cy="1790" r="260" fill="#a78bfa" opacity="0.08"/>
 
-数量：**1~5 张**，由内容多少决定，不为凑数硬拆，也绝不硬塞。
+  <!-- 大标题：两行，白 + 浅蓝，第二行是"钩子" -->
+  <text x="540" y="130" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif"
+        font-size="52" font-weight="800" fill="#ffffff">第一行标题</text>
+  <text x="540" y="195" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif"
+        font-size="52" font-weight="800" fill="#7dd3fc">第二行标题（钩子）</text>
+  <rect x="360" y="230" width="360" height="4" rx="2" fill="url(#accent)" opacity="0.9"/>
+  <text x="540" y="285" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif"
+        font-size="26" fill="#a9b7d0">副标题或吐槽一句 😂</text>
 
-## 三、图像生成提示词模板
+  <!-- 内容卡（按需复制 2~4 个，每个 y 递增 300 左右） -->
+  <rect x="60" y="330" width="960" height="270" rx="24" fill="#121a33" stroke="#26345c" stroke-width="2"/>
+  <text x="100" y="390" font-family="'PingFang SC','Microsoft YaHei',sans-serif"
+        font-size="30" font-weight="800" fill="#7dd3fc">卡片小标题</text>
+  <text x="100" y="440" font-family="'PingFang SC','Microsoft YaHei',sans-serif"
+        font-size="23" fill="#c7d2e8">要点一行，≤22 字</text>
+  <text x="100" y="485" font-family="'PingFang SC','Microsoft YaHei',sans-serif"
+        font-size="23" fill="#c7d2e8">要点一行，≤22 字</text>
+  <text x="100" y="530" font-family="'PingFang SC','Microsoft YaHei',sans-serif"
+        font-size="23" fill="#c7d2e8">要点一行，≤22 字</text>
 
-给每张贴图写一段提示词，包含【版式】【风格】【配色】【文字内容】四块：
-
+  <!-- 金句/总结卡：换底色 + 青色描边，视觉突出 -->
+  <rect x="60" y="1200" width="960" height="240" rx="24" fill="#0f2b3a" stroke="#22d3ee" stroke-width="2"/>
+  <text x="100" y="1260" font-family="'PingFang SC','Microsoft YaHei',sans-serif"
+        font-size="30" font-weight="800" fill="#7dd3fc">一句话总结</text>
+  <text x="100" y="1310" font-family="'PingFang SC','Microsoft YaHei',sans-serif"
+        font-size="24" fill="#c7d2e8">总结第一行</text>
+  <text x="100" y="1355" font-family="'PingFang SC','Microsoft YaHei',sans-serif"
+        font-size="24" fill="#7dd3fc">点睛一句 🌟</text>
+</svg>
 ```
-一张小红书风格的中文图文卡片。
-版式：竖版 3:4，大面积留白，文字居中偏上，四周留足边距。
-风格：极简、干净，大字标题 + 小字正文，层级清晰。
-配色：<背景色> 底 + <主色> 文字，最多 2 种颜色。
-图内文字（必须逐字准确，不要多字少字）：
-主标题：<≤16 字>
-正文：
-<行1，≤18字>
-<行2，≤18字>
-<行3，≤18字>
-底部：<可选，1 个 emoji 或短词>
+
+## 三、配色速查
+
+| 用途 | 色值 |
+|---|---|
+| 背景渐变 | `#0b1020 → #141f3d`（对角线） |
+| 内容卡底 / 描边 | `#121a33` / `#26345c` |
+| 金句卡底 / 描边 | `#0f2b3a` / `#22d3ee` |
+| 大标题（两行） | `#ffffff` / `#7dd3fc` |
+| 卡内小标题 | `#7dd3fc`（加粗） |
+| 正文 | `#c7d2e8` |
+| 辅助/吐槽行 | `#a9b7d0` |
+| 强调渐变条 | `#22d3ee → #a78bfa` |
+| 光晕圆 | 青/紫各一，`opacity 0.08`，放对角 |
+
+## 四、排版细则
+
+- 卡片高度按行数算：高度 ≈ 行数 × 45 + 顶部标题区 90 + 上下内边距。
+- 相邻卡片间距 24~30px；文字左缘统一 `x=100`（卡片 x=60 时）。
+- emoji 直接写在 `<text>` 末尾（🤔 😂 💸 🌟 👇 …），1~3 个，别堆。
+- 大标题两行分色是"钩子"的一部分：第一行陈述、第二行亮反差。
+
+## 五、SVG → PNG 转换
+
+```python
+import resvg_py
+png = resvg_py.svg_to_bytes(svg_string=svg_code)
+open("poster-01.png", "wb").write(bytes(png))
 ```
 
-**配色建议**（按主题选，保持整组一致）：
-- 财经/搞钱：深墨绿/深蓝底 + 白色/金色字
-- 警示/避坑：暖灰底 + 深红字
-- 轻松生活：米白底 + 墨黑字 + 一点橙色点缀
+- 已验证：中文（微软雅黑）+ 彩色 emoji 渲染正常（系统 python 已装 `resvg-py`）。
+- 转换后逐张检查：错字、文字溢出卡片、密度过满 → 改 SVG 重转。
 
-## 四、正反例
+## 六、正反例
 
-**❌ 反例（密度过高，一张塞了全文）：**
-> 主标题：当前年轻人负债问题分析
-> 正文：近年来年轻人负债问题日益严重主要原因包括消费观念转变信贷便利缺乏财务规划建议树立正确消费观合理使用信贷工具避免过度负债影响个人信用……
-> 问题：一句话没标点、信息堆满、无留白、主题空泛、读眼睛疼。
+**❌ 反例**：
+- 一张图塞 8 个要点、每行 30+ 字 → 眼睛疼；
+- 生成 5~7 张图组 → 太多，没人翻完；
+- 只给 PNG 不给 SVG → 用户没法改字复用。
 
-**✅ 正例（拆成两张）**：
-> **第 1 张（封面）**
-> 主标题：月入 1 万，欠了 115 万 🤔
-> 正文：
-> 天天拆东墙补西墙
-> 到底哪一步走错了
->
-> **第 2 张（要点）**
-> 主标题：三个坑，一个比一个狠
-> 正文：
-> ① 帮兄弟担保
-> ② 网贷以贷养贷
-> ③ 中介卷租跑路
->
-> 好在：每张一个点、字少留白足、有钩子、有表情、能一眼读完。
-
-## 五、中文渲染的坑与降级方案
-
-**问题**：多数生图模型画中文**容易错字、缺笔画、乱码**。
-
-**处理顺序**：
-1. 先试 `ImageGen` 直接生成，**逐张核对中文字形**。
-2. 若出现错字/乱码，或多次都不稳定 →
-   **降级方案：用 HTML 卡片渲染**——
-   - 写一个 HTML/CSS 卡片（固定尺寸，如 1080×1440），把主标题、正文按低密度规范排好版；
-   - 中文用系统字体（如"思源黑体"，保证字形准）；
-   - 用浏览器渲染 → 截图导出 PNG；
-   - 优点：**字形 100% 准确、密度完全可控**，适合文字要求精准的贴图。
-3. 两种方式可混用：封面用生图（视觉好），要点图用 HTML（文字准）。
-
-## 六、生成后核对清单
-
-- [ ] 图内中文有没有错字/缺字/乱码？
-- [ ] 文字密度是否够低？有没有堆满？
-- [ ] 每张是不是只讲了一个点？
-- [ ] 要点是否和原文意思一致？有没有掺进带货/宣传？
-- [ ] 整组配色风格是否统一？
+**✅ 正例**：
+- 1 张 1080×1920 深色卡：双色大标题 + 3 个内容卡（每卡 2~3 行短句）+ 1 个青边金句卡；
+- 交付 = PNG + 短文案（≤200 字）+ **SVG 代码原文**。
