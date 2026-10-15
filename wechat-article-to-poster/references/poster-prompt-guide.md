@@ -90,7 +90,7 @@ png = resvg_py.svg_to_bytes(svg_string=svg_code)
 open("poster-01.png", "wb").write(bytes(png))
 ```
 
-- 已验证：中文（微软雅黑）+ 彩色 emoji 渲染正常（系统 python 已装 `resvg-py`）。
+- 依赖 `resvg-py`（未安装时先 `pip install resvg-py`）；中文（微软雅黑）+ 彩色 emoji 渲染正常。
 - 转换后逐张检查：错字、文字溢出卡片、密度过满 → 改 SVG 重转。
 
 ## 六、正反例

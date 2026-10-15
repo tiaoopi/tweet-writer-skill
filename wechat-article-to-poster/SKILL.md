@@ -2,6 +2,13 @@
 name: wechat-article-to-poster
 description: 读公众号文章 → 生成微信贴图 + 短文案的技能。当用户给出一条微信公众号文章链接（mp.weixin.qq.com/...），要求"读取公众号文章""把这篇公众号做成贴图""公众号转贴图""生成微信贴图""文章转图文卡片"时使用。**必须先抓取并读完整篇文章正文**，再提炼核心，产出**≤3 张**「深色科技风、文字密度低」的贴图（SVG 代码 → 转 PNG），并配一段 ≤200 字、带表情、有钩子的简洁文字；**每次生成后必须把 SVG 代码原文输出给用户**。私人宣传、付费推广、带货软文、引流吸粉等同性质的内容一律剔除，不写进贴图与文案。
 agent_created: true
+slug: wechat-article-to-poster
+displayName: 公众号文章转贴图
+version: 1.0.0
+summary: 抓取并读透公众号长文，剔除私人宣传、付费推广与带货内容，产出最多 3 张深色科技风、低文字密度的贴图（SVG 转 PNG），并配一段不超过 200 字、带钩子的短文案。
+license: MIT
+tags: [公众号, 贴图, 小红书, 图文卡片, 文案]
+author: tonny
 ---
 
 # WeChat Article to Poster（公众号文章 → 微信贴图 + 短文案）
@@ -74,13 +81,15 @@ agent_created: true
 
 ### 第 4 步：SVG → PNG
 
-用 `resvg_py` 转换（已验证中文 + 彩色 emoji 渲染正常，系统 python 已装）：
+用 `resvg_py` 转换（需先装 `resvg-py`：`pip install resvg-py`；中文与彩色 emoji 渲染正常）：
 
 ```python
 import resvg_py
 png = resvg_py.svg_to_bytes(svg_string=svg_code)  # 返回可迭代的字节
 open("poster-01.png", "wb").write(bytes(png))
 ```
+
+**PNG 存放位置**：每张 PNG 转换后保存到当前工作目录；用户指定了归档目录时，按指定目录另存一份，SVG 文件一并保存。
 
 转换后**逐张核对**：中文有没有错字？文字有没有溢出卡片边界？密度是否过满？不合格就改 SVG 重新转换。
 
@@ -109,6 +118,7 @@ open("poster-01.png", "wb").write(bytes(png))
 - [ ] 每行 ≤22 字、整图正文 ≤180 字、密度够低？
 - [ ] SVG 是否按深色科技风规范写（渐变底、圆角卡、双色标题）？
 - [ ] PNG 转换后图内中文有没有错字、文字有没有溢出？
+- [ ] **PNG 与 SVG 是否已保存到用户指定目录（未指定则为当前工作目录）？**
 - [ ] **SVG 代码是否已原文输出给用户？**
 - [ ] 短文案是否 **≤200 字**、开头有钩子、有换行、有表情？
 - [ ] 是否尽量少讨论政治与色情？能沾钱时是否往钱上写？
