@@ -1,0 +1,24 @@
+{
+  "_comment": "本地技能 -> 资料库(网盘)节点映射。由 sync_library.py 自动维护；hash 为技能目录内容指纹，用于判断是否需要重新上传。",
+  "space_id": "AVWTwfg8BpQ5lGsWqPKLfS",
+  "parent_id": "Uaxy2Hve8px3XSXkgFqOXl",
+  "parent_title": "技能备份",
+  "skills": {
+    "tweet-writer": {
+      "node_id": "xSWGSRaSZkQTqvZSJ6Wb1Y",
+      "hash": "4ef66ff4a9b567de"
+    },
+    "tweet-rewriter": {
+      "node_id": "ipb4X6x4RbicK2eqYBm3Xn",
+      "hash": "bbf6249b77276540"
+    },
+    "image-tweet-writer": {
+      "node_id": "O4fvjn2BdBF30i3lgYMmav",
+      "hash": "22d91c32fd5a9a5e"
+    },
+    "wechat-article-to-poster": {
+      "node_id": "hPTwaWSbNlvyXugYeZv0uq",
+      "hash": "f6de8037283a7cd5"
+    }
+  }
+}
