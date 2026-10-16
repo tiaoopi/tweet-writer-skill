@@ -45,6 +45,7 @@ SYNC_SKILLS = [
     "tweet-rewriter",
     "image-tweet-writer",
     "wechat-article-to-poster",
+    "reverse-engineer-anything",
 ]
 
 

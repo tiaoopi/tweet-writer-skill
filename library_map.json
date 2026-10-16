@@ -6,19 +6,23 @@
   "skills": {
     "tweet-writer": {
       "node_id": "xSWGSRaSZkQTqvZSJ6Wb1Y",
-      "hash": "4ef66ff4a9b567de"
+      "hash": "451a3526f9674ac8"
     },
     "tweet-rewriter": {
       "node_id": "ipb4X6x4RbicK2eqYBm3Xn",
-      "hash": "bbf6249b77276540"
+      "hash": "71e4c4db32ba9843"
     },
     "image-tweet-writer": {
       "node_id": "O4fvjn2BdBF30i3lgYMmav",
-      "hash": "22d91c32fd5a9a5e"
+      "hash": "443222f49ad5dce4"
     },
     "wechat-article-to-poster": {
       "node_id": "hPTwaWSbNlvyXugYeZv0uq",
-      "hash": "f6de8037283a7cd5"
+      "hash": "4da629ce7e8eb86d"
+    },
+    "reverse-engineer-anything": {
+      "node_id": "kI8vDHhh47jHIHdbqJWB2M",
+      "hash": "837b682149cdfe6b"
     }
   }
 }
