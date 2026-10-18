@@ -6,15 +6,15 @@
   "skills": {
     "tweet-writer": {
       "node_id": "xSWGSRaSZkQTqvZSJ6Wb1Y",
-      "hash": "451a3526f9674ac8"
+      "hash": "733ad8482a2825f1"
     },
     "tweet-rewriter": {
       "node_id": "ipb4X6x4RbicK2eqYBm3Xn",
-      "hash": "71e4c4db32ba9843"
+      "hash": "47869b910bb555df"
     },
     "image-tweet-writer": {
       "node_id": "O4fvjn2BdBF30i3lgYMmav",
-      "hash": "443222f49ad5dce4"
+      "hash": "b8c747999b8cc325"
     },
     "wechat-article-to-poster": {
       "node_id": "hPTwaWSbNlvyXugYeZv0uq",
