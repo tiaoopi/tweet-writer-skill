@@ -21,3 +21,8 @@
 ## 2026-10-18 09:26
 - sync_skills.py：image-tweet-writer 有变化，其余 4 个无变化。commit c4d9e89（3 files, +8/-3）已成功推送到 origin/main（tiaoopi/writer-skill）。
 - sync_library.py：image-tweet-writer 覆盖更新成功（节点 O4fvjn2BdBF30i3lgYMmav），其余 4 个无变化跳过。沙箱内一次成功。
+
+## 2026-10-19 06:33
+- sync_skills.py：5 个技能内容均无变化，但 README 生成时间戳导致仓库有改动，commit cfdca3d 创建成功；沙箱内 git push 卡死 10+ 分钟（连代理可达但仍挂起），手动停止。
+- 补推教训：`-c credential.helper=helper-selector` 会挂起（非有效 helper）；直接用仓库默认配置（GCM + 7890 代理）+ `GIT_TERMINAL_PROMPT=0 GCM_INTERACTIVE=Never`，沙箱外一次成功（c4d9e89..cfdca3d main -> main）。
+- sync_library.py：5 个技能全部无变化跳过。沙箱外一次成功。
