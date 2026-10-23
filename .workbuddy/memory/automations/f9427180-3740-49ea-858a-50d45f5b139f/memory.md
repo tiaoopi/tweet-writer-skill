@@ -32,3 +32,8 @@
 - 按昨日教训沙箱外直接 `git push origin main`（默认 GCM + 7890 代理）一次成功（cfdca3d..745c30f main -> main）。
 - sync_library.py：5 个技能全部无变化跳过。沙箱内一次成功。
 - 结论固化：沙箱内 git push 必挂起，本自动化后续遇 push 直接走沙箱外补推，无需等待。
+
+## 2026-10-23 08:13
+- sync_skills.py：5 个技能均无变化，仅 README 时间戳改动，commit c0da096 创建成功；脚本内置 push 失败（代理 127.0.0.1:7890 连不上）。
+- 新情况：本机代理软件（7890）未运行，但 github.com 直连可通（curl 200）。代理配置在 ~/.gitconfig 的 `http.https://github.com.proxy`（URL 作用域），普通 `-c http.proxy=` 覆盖不掉，须用 `git -c http.https://github.com.proxy= push origin main`。沙箱外一次推送成功（745c30f..c0da096）。
+- sync_library.py：5 个技能全部无变化跳过。沙箱内一次成功。
