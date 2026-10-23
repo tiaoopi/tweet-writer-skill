@@ -26,3 +26,9 @@
 - sync_skills.py：5 个技能内容均无变化，但 README 生成时间戳导致仓库有改动，commit cfdca3d 创建成功；沙箱内 git push 卡死 10+ 分钟（连代理可达但仍挂起），手动停止。
 - 补推教训：`-c credential.helper=helper-selector` 会挂起（非有效 helper）；直接用仓库默认配置（GCM + 7890 代理）+ `GIT_TERMINAL_PROMPT=0 GCM_INTERACTIVE=Never`，沙箱外一次成功（c4d9e89..cfdca3d main -> main）。
 - sync_library.py：5 个技能全部无变化跳过。沙箱外一次成功。
+
+## 2026-10-20 07:29
+- sync_skills.py：5 个技能均无变化，但 README 时间戳 + 新增 .workbuddy/memory/2026-10-19.md 导致仓库有改动，commit 745c30f 创建成功；沙箱内 push 再次挂起 10 分钟，手动停止。
+- 按昨日教训沙箱外直接 `git push origin main`（默认 GCM + 7890 代理）一次成功（cfdca3d..745c30f main -> main）。
+- sync_library.py：5 个技能全部无变化跳过。沙箱内一次成功。
+- 结论固化：沙箱内 git push 必挂起，本自动化后续遇 push 直接走沙箱外补推，无需等待。
